@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="/main.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body class="grey-bg">
+
+    <%- include('nav.ejs') %>
+
+        <div class="detail-bg">
+            <h4>
+                <%= posts.title %>
+            </h4>
+            <p>
+                <%= posts.content %>
+            </p>
+            <p id="image">
+                <% if (posts.img !==undefined) { %>
+                    <img style="width: 100%" src=<%=posts.img %> >
+                    <% } %>
+            </p>
+
+            <p>
+                <button class="btn btn-danger">
+                    <a style="color: white" href="/update/<%= posts._id %>">수정</a>
+                </button>
+                <button class="btn btn-danger">
+                    <a href="/list" style="color: white" class="delete" data-num="<%= posts._id %>">삭제</a>
+                </button>
+                <button class="btn btn-primary">
+                    <a style="color: white" href="/chat/<%= posts._id %>">채팅</a>
+                </button>
+            </p>
+        </div>
+        <div class="detail-bg">
+            <div class="input-group mb-3">
+                <form style="width: 100%; height: 40px; display: flex;" action="/comment/<%= posts._id %>"
+                    method="POST">
+                    <input name="content" type="text" class="form-control" placeholder="댓글을 작성하세요"
+                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button style="width: 80px;" class="btn btn-outline-secondary" type="submit"
+                        id="button-addon2">작성</button>
+                </form>
+            </div>
+            <% for (let i=0; i<comment.length; i++) { %>
+                <div>
+                    <p style="margin:0px; color: #A9AFB3">
+                        <span style="color: black; font-weight: 1000">
+                            <%= comment[i].writer %>
+                        </span>
+                        <%= comment[i].time %>
+                    </p>
+                    <p>
+                        <%= comment[i].content %>
+                    </p>
+
+                </div>
+
+                <% } %>
+        </div>
+
+        <!-- BootStrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+
+        <!-- My JS -->
+        <script>
+            $('.delete').on('click', function (e) {
+                let postId = e.target.dataset.num;
+                $.post(`/delete/${postId}`, { _id: postId })
+            });               
+        </script>
+</body>
+
+</html>
